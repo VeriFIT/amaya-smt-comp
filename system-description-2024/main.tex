@@ -8,7 +8,7 @@
 
 \begin{document}
 
-\title{\amaya 1.0.0}
+\title{\amaya v2.0}
 \subtitle{System description for SMT-COMP 2024}
 
 %%
@@ -84,11 +84,49 @@
 \maketitle
 
 
-\section{Introduction}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vspace{-0.0mm}
+\section{Overview}
+\vspace{-0.0mm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\amaya is a~standalone solver for quantified \emph{linear integer arithmetic}
+(LIA)\footnote{also sometimes referred to as \emph{Presburger arithmetic}}
+based on finite automata (FAs).
+The foundation of the decision procedure implemented in \amaya 
+is the work of B\"{u}chi~\cite{Buchi60} (in the context of showing
+automata-based decidability of the \emph{weak monadic second-order theory of
+one successor}---WS1S---into which LIA can be encoded), which was later
+tailored for LIA (including the linear congrurence operator) in the
+works~\cite{BoudetC96,BoigelotJW05,Durand-GasselinH10}.
+% and implemented in \lash~\cite{LASH}.
+The basic procedure works by constructing an FA~$\autof \varphi$ for each atomic formula~$\varphi$, which
+is of the form $a_1 x_1 + \ldots a_n x_n \sim c$ where ${\sim} \in \{{=},
+{\leq}, {\equiv_m}\}$ for integers $a_1, \ldots, a_n, c$ and a natural
+number~$m$.
+The FA~$\autof \varphi$ represents all solutions of the formula~$\varphi$,
+encoded as tuples of binary numbers in the two's complement encoding.
+
+\amaya implements the procedure with several crucial optimizations described in~\cite{HabermehlHHHL24}.
+
 
 \ol{}
 
 Sylvan~\cite{DijkP15}
+
+CAV \cite{HabermehlHHHL24}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vspace{-0.0mm}
+\section{Approach}\label{sec:label}
+\vspace{-0.0mm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
 
 % Biblography
 \bibliographystyle{ACM-Reference-Format}
