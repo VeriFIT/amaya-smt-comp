@@ -90,7 +90,8 @@
 \vspace{-0.0mm}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\amaya is a~standalone solver for quantified \emph{linear integer arithmetic}
+\amaya\footnote{\url{https://github.com/MichalHe/amaya}} is a~standalone solver for
+quantified \emph{linear integer arithmetic}
 (LIA)\footnote{also sometimes referred to as \emph{Presburger arithmetic}}
 based on finite automata (FAs).
 The foundation of the decision procedure implemented in \amaya 
@@ -100,28 +101,64 @@ one successor}---WS1S---into which LIA can be encoded), which was later
 tailored for LIA (including the linear congrurence operator) in the
 works~\cite{BoudetC96,BoigelotJW05,Durand-GasselinH10}.
 % and implemented in \lash~\cite{LASH}.
-The basic procedure works by constructing an FA~$\autof \varphi$ for each atomic formula~$\varphi$, which
+The basic procedure works by constructing an FA~$\autof{\varphi_\atom}$ for
+each atomic formula~$\varphi_\atom$, which
 is of the form $a_1 x_1 + \ldots a_n x_n \sim c$ where ${\sim} \in \{{=},
-{\leq}, {\equiv_m}\}$ for integers $a_1, \ldots, a_n, c$ and a natural
-number~$m$.
-The FA~$\autof \varphi$ represents all solutions of the formula~$\varphi$,
+{\leq}, {\equiv_m}\}$ (with $\equiv_m$ being the linear congruence modulo~$m \in \nat \setminus \{0\}$)
+for integers $a_1, \ldots, a_n, c$ and a natural number~$m$.
+The FA~$\autof{\varphi_\atom}$ represents all solutions of the formula~$\varphi_\atom$,
 encoded as tuples of binary numbers in the two's complement encoding.
+FAs for complex formulae are then obtained inductively by performing standard
+automata operations: \emph{intersection} for conjunction, \emph{union} for disjunction,
+\emph{complementation} for negation.
+Existential quantification is performed by the operation of \emph{projection}
+on the alphabet of the corresponding FA (followed by saturation of the FAs
+accepting states).
 
-\amaya implements the procedure with several crucial optimizations described in~\cite{HabermehlHHHL24}.
+\amaya implements the procedure with several crucial optimizations described
+in~\cite{HabermehlHHHL24}.
+In particular, it fights the issue of constructing FAs with too many states
+(which emerge, e.g., when translating modulo congruence predicates) by directly
+creating FAs for non-atomic formulae using a~derivative based construction with
+implicit pruning and subsumption.
+Moreover, the procedure also uses certain techniques of quantifier
+instantiation (based on formula monotonicity, finite range of models, and
+modulo linearization) as well as standard simplification techniques for
+on-the-fly rewriting of the formula for which the FA is being constructed. 
+
+\ol{preprocessing?}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vspace{-0.0mm}
+\section{Implementation}\label{sec:label}
+\vspace{-0.0mm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The high-level part of the decision procedure of \amaya is implemented in Python.
+Since the size of the underlying FA alphabet grows exponentially with the number of variables in the formula, needing to deal with alphabets having thousands up to millions of symbols, causing an explicit representation of the transition relation infeasible.
+To deal with this issue, \amaya encodes the transition relation using
+\emph{multi-terminal binary decision diagrams} (MTBDDs) implemented within the
+\sylvan library~\cite{DijkP15}, which often yields a~much more compact representation.
+As \sylvan is a~C~library, \amaya includes a~C++ backend that connects to the
+Python frontend via a~\texttt{ctypes} interface.
+\ol{what else is in C++?}
+
 
 
 \ol{}
 
-Sylvan~\cite{DijkP15}
-
-CAV \cite{HabermehlHHHL24}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \vspace{-0.0mm}
-\section{Approach}\label{sec:label}
+\section{\amaya in SMT-COMP 2024}\label{sec:label}
 \vspace{-0.0mm}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+We are submitting version v2.0 of \amaya to compete in the single query track
+of the division Arith, in logics LIA and NIA (nonlinear integer arithmetic; we
+participate in NIA because it contains many formulae that are linear in nature, but
+include the~$\equiv_m$ predicate, which is not considered linear by SMT-LIB).
 
 
 
