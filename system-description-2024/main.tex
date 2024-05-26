@@ -140,12 +140,15 @@ To deal with this issue, \amaya encodes the transition relation using
 \emph{multi-terminal binary decision diagrams} (MTBDDs) implemented within the
 \sylvan library~\cite{DijkP15}, which often yields a~much more compact representation.
 As \sylvan is a~C~library, \amaya includes a~C++ backend that connects to the
-Python frontend via a~\texttt{ctypes} interface.
-\ol{what else is in C++?}
+Python frontend via a~\texttt{ctypes} interface. The C++ backend also implements
+procedures for constructing FA~$\autof{\varphi_\atom}$ accepting the solutions
+of an atomic formula $\varphi_\atom$, and the derivative-based
+construction.
 
-
-
-\ol{}
+% Note(mhecko):
+% The following is implemented in Python: SMTLIB parser, orchestration of the classical procedure
+% (scheduling of automata operations based on corresponding Boolean connectives), rewriting of
+% nonliner terms (mod terms, div terms), formula optimizations based on static analysis of the formula.
 
 
 
