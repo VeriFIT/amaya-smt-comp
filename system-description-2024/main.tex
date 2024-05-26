@@ -2,12 +2,13 @@
 \settopmatter{printacmref=false, printccs=false, printfolios=false}
 \authorsaddresses{}
 
+\usepackage{xspace}
 
 \input{macros.tex}
 
 \begin{document}
 
-\title{Amaya 1.0.0}
+\title{\amaya 1.0.0}
 \subtitle{System description for SMT-COMP 2024}
 
 %%
@@ -75,8 +76,9 @@
 
 \begin{abstract}
   This is a~brief overview of \amaya's submission to SMT-COMP 2024.
-  \amaya is a standalone solver for quantified linear arithmetic based on finite automata.
-  \ol{bla}
+  \amaya is a standalone solver for quantified linear integer arithmetic (LIA) based on finite automata.
+  It implements the standard automata-based decision procedure with several crucial optimizations that prune vast fractions of the underlying state space.
+  Contrary to standard approaches, \amaya constructs a~compact representation of all models of the LIA formula.
 \end{abstract}
 
 \maketitle
