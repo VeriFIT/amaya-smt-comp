@@ -125,8 +125,9 @@ Moreover, the procedure also uses certain techniques of quantifier
 instantiation (based on formula monotonicity, finite range of models, and
 modulo linearization) as well as standard simplification techniques for
 on-the-fly rewriting of the formula for which the FA is being constructed. 
-
-\ol{preprocessing?}
+Before the main procedure is executed, \amaya also runs preprocessing, which
+optimizes the input formula by static analysis tailored for the automata-based
+procedure.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \vspace{-0.0mm}
@@ -134,8 +135,11 @@ on-the-fly rewriting of the formula for which the FA is being constructed.
 \vspace{-0.0mm}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The high-level part of the decision procedure of \amaya is implemented in Python.
-Since the size of the underlying FA alphabet grows exponentially with the number of variables in the formula, needing to deal with alphabets having thousands up to millions of symbols, causing an explicit representation of the transition relation infeasible.
+The frontend of \amaya is implemented in Python.
+Since the size of the underlying FA alphabet grows exponentially with the
+number of variables in the formula, needing to deal with alphabets having
+thousands up to millions of symbols, causing an explicit representation of the
+transition relation infeasible.
 To deal with this issue, \amaya encodes the transition relation using
 \emph{multi-terminal binary decision diagrams} (MTBDDs) implemented within the
 \sylvan library~\cite{DijkP15}, which often yields a~much more compact representation.
@@ -144,6 +148,9 @@ Python frontend via a~\texttt{ctypes} interface. The C++ backend also implements
 procedures for constructing FA~$\autof{\varphi_\atom}$ accepting the solutions
 of an atomic formula $\varphi_\atom$, and the derivative-based
 construction.
+On the other hand, the Python frontend performs parsing of the input SMTLIB
+formula, preprocessing of the input by static analysis and rewriting, and
+orchestration of the decision procedure (which is performed in the backend).
 
 % Note(mhecko):
 % The following is implemented in Python: SMTLIB parser, orchestration of the classical procedure
@@ -157,6 +164,7 @@ construction.
 \section{\amaya in SMT-COMP 2024}\label{sec:label}
 \vspace{-0.0mm}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 We are submitting version v2.0 of \amaya to compete in the single query track
 of the division Arith, in logics LIA and NIA (nonlinear integer arithmetic; we
